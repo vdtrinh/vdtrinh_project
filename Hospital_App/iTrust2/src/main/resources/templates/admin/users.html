@@ -1,0 +1,664 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: head(title=~{::title},links=~{})">
+<title>Manage Users</title>
+</head>
+<body th:include="layout :: body" th:with="content=~{::content}">
+	<div th:fragment="content">
+		<script th::inline="javascript">
+		/* Otherwise Thymeleaf tries to parse Javascript as XML and breaks itself sometimes.  Sigh */
+		/*<![CDATA[*/
+ 			var app = angular.module("manageUsersApp", []);
+			app.controller("manageUsersCtrl", function($scope, $http) {
+				
+				$scope.visible = false;
+				document.getElementById("patientAdvocateInfo").style.visibility = "hidden";
+				
+				function advocateFormVisibility () {
+					$scope.visible = !$scope.visible;
+					if ($scope.visible) {
+						document.getElementById("patientAdvocateInfo").style.visibility = "visible";
+					} else {
+						document.getElementById("patientAdvocateInfo").style.visibility = "hidden";
+					}					
+				}
+				
+				var checkValidUserForm = function(user) {
+					var err = [];
+					
+					console.log($scope.user);
+					
+					<!--Role combination error checking-->
+	 				if ( $scope.user.roles.includes( "ROLE_PATIENTADVOCATE" ) && $scope.user.roles.includes( "ROLE_HCP" ) ) {
+	 					console.log("Warning: Cannot combine PatientAdvocate and HCP roles!!");
+	 					err.push("Patient advocates cannot also be HCP.");
+	 				}
+	 				
+	 				console.log("Role combos checked!");
+				
+					<!--Username error checking-->
+					if ( typeof $scope.user.username === 'undefined' ) {
+						console.log("Undefined username.");
+						err.push("Username is required");
+					} else {
+						console.log("Username: " + $scope.user.username);
+						
+						for(var i = 0; i < $scope.users.length; i++ ) {
+							if( $scope.user.username === $scope.users[i].username) {
+							    err.push("Username already exists.");
+							}
+						}
+						
+						console.log("Unique username checked!");
+						
+						if( $scope.user.username.length < 6)
+		 					err.push("Username must be more than 6 characters long.");
+						if( $scope.user.username.length > 20)
+							err.push("Username cannot be longer than 20 characters.");					
+						<!--Add error checking to enforce that username only includes alpha characters, plus - and _-->
+						if (/[a-zA-Z_\-]+/.exec($scope.user.username) == $scope.user.username ) {
+		 					console.log("USERNAME MATCHES PATTERN");
+		 					console.log("Username after regex: " + /[a-zA-Z_\-]+/.exec($scope.user.username));
+		 				} else {
+		 					console.log("Username after regex: " + /[a-zA-Z_\-]+/.exec($scope.user.username));
+		 					console.log("USERNAME DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid username");
+		 				}
+						
+						console.log("Username checked!");
+					}
+					
+					<!--Password error checking-->
+					if ( typeof $scope.user.password === 'undefined' ) {
+						console.log("Undefined password.");
+						err.push("Password is required");
+					} else {
+						console.log("Password: " + $scope.user.password);
+						console.log("Repeated password: " + $scope.user.password2);
+						
+						if( $scope.user.password === $scope.user.password2) {
+						    // do nothing
+						} else {
+							err.push("Passwords do not match." );
+						}
+		       	        
+		       	     	console.log("Password match checked!");
+		       	        
+		       	        if( $scope.user.password.length < 6)
+		 					err.push("Password must be more than 6 characters long.");
+		 				if ( $scope.user.password.length > 20 )
+		 					err.push("Password cannot be longer than 20 characters.");
+		 				
+		 				console.log("Password checked!");
+					}
+					
+					if ($scope.user.roles.includes("ROLE_PATIENTADVOCATE")) {	 				
+	 				<!--First name error checking-->
+	 				if ( typeof $scope.user.firstName === 'undefined' ) {
+	 					console.log("Undefined first name.");
+	 					err.push("First name is required");
+					} else {
+						console.log("First name: " + $scope.user.firstName);
+						
+	 					if( $scope.user.firstName != "" && $scope.user.firstName.length < 1 || $scope.user.firstName.length > 20 )
+	 						err.push("First name must be between 1-20 characters.");
+	 					<!--Add error checking to enforce that first name only includes alpha characters, plus ., -, and space-->
+	 					if (/[a-zA-Z-. ]+/.exec($scope.user.firstName) == $scope.user.firstName) {
+		 					console.log("FIRST NAME MATCHES PATTERN");
+		 					console.log("After regex: " + /[a-zA-Z-. ]+/.exec($scope.user.firstName));
+		 				} else {
+		 					console.log("FIRST NAME DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid first name");
+		 				}	 						 					
+	 					
+	 					console.log("First name checked!");
+					}
+	 				
+	 				<!--Middle name error checking-->
+	 				if ( typeof $scope.user.middleName === 'undefined' ) {
+						// Optional
+	 					console.log("Undefined middle name.");
+					} else {
+						console.log("Middle name: " + $scope.user.middleName);
+						
+						if( $scope.user.middleName != "" && $scope.user.middleName.length < 1 || $scope.user.middleName.length > 20 )
+		 					err.push("Middle name must be between 1-20 characters.");
+						<!--Add error checking to enforce that middle name only includes alpha characters, plus - and space-->
+	 					if (/[a-zA-Z- ]+/.exec($scope.user.middleName) == $scope.user.middleName) {
+		 					console.log("MIDDLE NAME MATCHES PATTERN");
+		 					console.log("After regex: " + /[a-zA-Z- ]+/.exec($scope.user.middleName));
+		 				} else {
+		 					console.log("MIDDLE NAME DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid middle name");
+		 				}	 
+		 				
+		 				console.log("Middle name checked!");
+					}
+	 				
+	 				<!--Nickname error checking-->
+	 				if ( typeof $scope.user.nickname === 'undefined' ) {
+						// Optional
+	 					console.log("Undefined nickname.");
+					} else {
+						console.log("Nickname: " + $scope.user.nickname);
+						
+						if( $scope.user.nickname != "" && $scope.user.nickname.length < 1 || $scope.user.nickname.length > 20 )
+		 					err.push("Nickname must be between 1-20 characters.");
+						<!--Add error checking to enforce that nickname only includes alpha characters, plus - and space-->
+	 					if (/[a-zA-Z- ]+/.exec($scope.user.nickname) == $scope.user.nickname) {
+		 					console.log("NICKNAME MATCHES PATTERN");
+		 					console.log("After regex: " + /[a-zA-Z- ]+/.exec($scope.user.nickname));
+		 				} else {
+		 					console.log("NICKNAME DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid nickname");
+		 				}	 
+		 				
+		 				console.log("Nickname checked!");
+					}
+	 				
+	 				<!--Last name error checking-->
+	 				if ( typeof $scope.user.lastName === 'undefined' ) {
+	 					console.log("Undefined last name.");
+	 					err.push("Last name is required");
+					} else {
+						console.log("Last name: " + $scope.user.lastName);
+						
+						if( $scope.user.lastName != "" && $scope.user.lastName.length < 1 || $scope.user.lastName.length > 30 )
+		 					err.push("Last name must be between 1-30 characters.");
+						<!--Add error checking to enforce that last name only includes alpha characters, plus - and space-->
+	 					if (/[a-zA-Z- ]+/.exec($scope.user.lastName) == $scope.user.lastName) {
+		 					console.log("LAST NAME MATCHES PATTERN");
+		 					console.log("After regex: " + /[a-zA-Z- ]+/.exec($scope.user.lastName));
+		 				} else {
+		 					console.log("LAST NAME DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid last name");
+		 				}	 
+		 				
+		 				console.log("Last name checked!");
+					}
+	 				
+	 				<!--Address line 1 error checking-->
+	 				if ( typeof $scope.user.address1 === 'undefined' ) {
+	 					console.log("Undefined address line 1.");
+	 					err.push("Address line 1 is required");
+					} else {
+						console.log("Address line 1: " + $scope.user.address1);
+						
+						if( $scope.user.address1 != "" && $scope.user.address1.length < 1 || $scope.user.address1.length > 30 )
+		 					err.push("Address line 1 must be between 1-50 characters.");	 				
+		 				<!--Add error checking to enforce that address line 1 only includes alphanumeric characters, plus . and space-->
+		 				if (/[a-zA-Z0-9. ]+/.exec($scope.user.address1) == $scope.user.address1) {
+		 					console.log("ADDRESS LINE 1 MATCHES PATTERN");
+		 					console.log("After regex: " + /[a-zA-Z0-9. ]+/.exec($scope.user.address1));
+		 				} else {
+		 					console.log("ADDRESS LINE 1 DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid city");
+		 				}	 
+		 				
+		 				console.log("Address line 1 checked!");
+					}
+	 				
+	 				<!--Address line 2 error checking-->
+	 				if ( typeof $scope.user.address2 === 'undefined' ) {
+						// Optional
+	 					console.log("Undefined address line 2");
+					} else {
+						console.log("Address line 2: " + $scope.user.address2);
+						
+						if( $scope.user.address2 != "" && $scope.user.address2.length < 1 || $scope.user.address2.length > 30 )
+		 					err.push("Address line 2 must be between 1-50 characters.");	 				
+		 				<!--Add error checking to enforce that address line 2 only includes alphanumeric characters, plus . and space-->
+		 				if (/[a-zA-Z0-9. ]+/.exec($scope.user.address2) == $scope.user.address2) {
+		 					console.log("ADDRESS LINE 2 MATCHES PATTERN");
+		 					console.log("After regex: " + /[a-zA-Z0-9. ]+/.exec($scope.user.address2));
+		 				} else {
+		 					console.log("ADDRESS LINE 2 DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid city");
+		 				}	
+		 				
+		 				console.log("Address line 2 checked!");
+					}
+	 				
+	 				<!--City error checking-->
+	 				if ( typeof $scope.user.city === 'undefined' ) {
+	 					console.log("Undefined city.");
+	 					err.push("City is required");
+					} else {
+						console.log("City: " + $scope.user.city);
+						
+						if( $scope.user.city != "" && $scope.user.city.length < 1 || $scope.user.city.length > 15 )
+		 					err.push("City must be between 1-15 characters.");
+						<!--Add error checking to enforce that city only includes alpha characters, plus - and space-->
+	 					if (/[a-zA-Z- ]+/.exec($scope.user.city) == $scope.user.city) {
+		 					console.log("CITY MATCHES PATTERN");
+		 					console.log("After regex: " + /[a-zA-Z- ]+/.exec($scope.user.city));
+		 				} else {
+		 					console.log("CITY DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid city");
+		 				}	 
+						
+		 				console.log("City checked!");
+					}
+	 				
+	 				<!--State error checking-->
+	 				if ( typeof $scope.user.state === 'undefined' ) {
+	 					console.log("Undefined state.");
+						err.push("State is required");
+					} else {
+						console.log("State: " + $scope.user.state);
+						
+						if( $scope.user.state != "" && $scope.user.state.length != 2 )
+		 					err.push("State must be 2 characters.");	 				
+		 				<!--Add error checking to enforce that state only accepts 2 alphabetical characters.-->
+		 				if (/[A-Z]{2}/.exec($scope.user.state) == $scope.user.state) {
+		 					console.log("STATE MATCHES PATTERN");
+		 					console.log("After regex: " + /[A-Z]{2}/.exec($scope.user.state));
+		 				} else {
+		 					console.log("STATE DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid state");
+		 				}
+		 				
+		 				console.log("State checked!");
+					}
+	 				
+	 				<!--Zip error checking-->
+	 				if ( typeof $scope.user.zip === 'undefined' ) {
+	 					console.log("Undefined zip code.");
+						err.push("Zip code is required");
+					} else {
+						console.log("Zip code: " + $scope.user.zip);
+						
+						if( $scope.user.zip != "" && $scope.user.zip.length < 5 || $scope.user.zip.length > 10 )
+		 					err.push("Zip code must be 5-10 characters.");	 				
+		 				<!--Add error checking to enforce that zip code only accepts numeric characters-->
+		 				if ( /[0-9]{5}[-][0-9]{4}/.exec($scope.user.zip) == $scope.user.zip ) {
+		 					console.log("ZIP CODE MATCHES PATTERN XXXXX-XXXX");
+		 					console.log("Zip code after regex XXXXX-XXXX: " + /[0-9]{5}[-][0-9]{4}/.exec($scope.user.zip));
+		 				} else if (/[0-9]{5}/.exec($scope.user.zip) == $scope.user.zip ) {
+		 					console.log("ZIP CODE MATCHES PATTERN XXXXX");
+		 					console.log("Zip code after regex XXXXX: " + /[0-9]{5}/.exec($scope.user.zip));
+		 				} else {
+		 					console.log("ZIP CODE DOESN'T MATCH EITHER PATTERN");
+		 					err.push("Enter valid zip code");
+		 				}
+		 				
+		 				console.log("Zip checked!");
+					}
+	 				
+	 				<!--Phone number error checking-->
+	 				if ( typeof $scope.user.phone === 'undefined' ) {
+	 					console.log($scope.user.phone);
+	 					
+	 					console.log("Undefined phone number.");
+						err.push("Phone number is required");
+					} else {
+						console.log("Phone number: " + $scope.user.phone);
+						
+		 				<!--Add error checking to enforce XXX-XXX-XXXX pattern where X's represent numeric digits 0-9 - probably regex-->
+		 				if (/[0-9]{3}[-][0-9]{3}[-][0-9]{4}/.exec($scope.user.phone) == $scope.user.phone ) {
+		 					console.log("PHONE NUMBER MATCHES PATTERN");
+		 					console.log("Phone number after regex: " + /[0-9]{3}[-][0-9]{3}[-][0-9]{4}/.exec($scope.user.phone));
+		 				} else {
+		 					console.log("PHONE NUMBER DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid phone number");
+		 				}
+					}
+	 				
+	 				<!--Email error checking-->
+	 				if ( typeof $scope.user.email === 'undefined' ) {
+	 					console.log("Undefined email.");
+						err.push("Email is required");
+					} else {
+						console.log("Email: " + $scope.user.email);
+						
+						if( $scope.user.email != "" && $scope.user.email.length < 1 || $scope.user.email.length > 30 )
+		 					err.push("Email must be 1-30 characters.");	 				
+						
+		 				<!--Add error checking to enforce that email only accepts alphanumeric characters and symbols @, _, and .-->
+		 				if (/[a-zA-Z0-9_]+[@][a-zA-Z0-9]+[.][a-zA-Z0-9]+/.exec($scope.user.email) == $scope.user.email) {
+		 					console.log("EMAIL MATCHES PATTERN");
+		 					console.log("After regex: " + /[a-zA-Z0-9_]+[@][a-zA-Z0-9]+[.][a-zA-Z0-9]+/.exec($scope.user.email));
+		 				} else {
+		 					console.log("EMAIL DOESN'T MATCH PATTERN");
+		 					err.push("Enter valid email address");
+		 				}
+		 				
+		 				
+		 				
+		 				console.log("Email checked!");
+					}
+				}
+	 				
+	 				console.log("Everything has been checked for validity.");
+	 				
+					return err.join(".  ");
+				}
+				
+			$http.get("/iTrust2/api/v1/state").then(function(response) {
+				$scope.states = response.data;
+			});
+				
+			
+		    $scope.users = [];
+	        $scope.loadUsers = function () {
+	          $http.get("/iTrust2/api/v1/users").then(
+	            function (response) {
+	              $scope.users = response.data;
+	              $scope.message = "";
+	            }, function (rejection) {
+	              $scope.users = [];
+	              $scope.message = "Could not display users";
+	            });
+	        }
+	        
+	        $scope.addUser = function () {
+	        	
+	        	$scope.visible = false;
+	        	
+	        	let roles = [];
+	        	
+				for (let [key, value] of Object.entries($scope.user.roles)) {
+					console.log($scope.user.roles);
+					  if(value === true) roles.push(key);
+				}
+				
+				$scope.user.roles = roles;
+	        	
+		          var err = checkValidUserForm($scope.user);
+		          if (err) {
+		            $scope.errorAdding = err;
+		            $scope.successMessage = "";
+		          } else {
+		        	  console.log($scope.user);
+		            $http.post("/iTrust2/api/v1/users", $scope.user).then(
+		              function (response) {
+		            	    $scope.loadUsers();
+		            	    
+		            	    $scope.user.username = "";
+	    	                $scope.user.password = "";
+	    	                $scope.user.password2 = "";
+	    	                <!--Boolean, expressed elsewhere with Integers-->
+	    	                $scope.user.enabled = false;
+	    	                <!--What does setting this singular role do?-->
+	     	                $scope.user.role = "ROLE_PATIENT";
+	    	                $scope.user.firstName = "";
+	    	                $scope.user.middleName = "";
+	    	                $scope.user.lastName = "";
+	    	                $scope.user.nickname = "";
+	    	                $scope.user.address1 = "";
+	    	                $scope.user.address2 = "";
+	    	                $scope.user.city = "";
+	    	                $scope.user.state = "";
+	    	                $scope.user.zip = "";
+	    	                $scope.user.phone = "";
+	    	                $scope.user.email = "";
+	    	                
+	    	                document.getElementById("patientAdvocateInfo").style.visibility = "hidden";
+		            	
+		                angular.element(document.getElementById('ROLE_HCP'))[0].disabled = false;
+		                $scope.errorAdding = "";
+		                $scope.successMessage = "User added successfully.";
+		              }, function (rejection) {
+		            	    $scope.loadUsers();
+		                $scope.errorAdding = "Could not add User: " + rejection.data.message;
+		                $scope.successMessage = "";
+		              });
+		            
+/*  		            $scope.user.username = "";
+	                $scope.user.password = "";
+	                $scope.user.password2 = "";
+	                $scope.user.enabled = false;
+/* 	                <!--Not needed?-->
+ 	                $scope.user.role = "ROLE_PATIENT";
+	                $scope.user.first_name = "";
+	                $scope.user.middle_name = "";
+	                $scope.user.last_name = "";
+	                $scope.user.nickname = "";
+	                $scope.user.address1 = "";
+	                $scope.user.address2 = "";
+	                $scope.user.city = "";
+	                $scope.user.state = "";
+	                $scope.user.zip = "";
+	                $scope.user.phone = "";
+	                $scope.user.email = "";  */
+		            
+		          }
+	        }
+			
+	        $scope.deleteUser = function(user) {
+	            $http.delete('/iTrust2/api/v1/users/' + user.username).then(
+	              function (response) {
+	                $scope.loadUsers();
+	              }, function (rejection) {
+	            	    $scope.loadUsers();
+	                $scope.message = "Could not remove user";
+	              });
+	          }
+	        
+	        $scope.editRoles = function (user){
+	        	
+	        }
+
+	        $scope.getTemplate = function (user) {
+	          return 'view';
+	        };
+	        
+	        $scope.enabledText = function(user) {
+	        	  if(user.enabled) {
+	        		  return 'yes';        		  
+	        	  } else {
+	        		  return 'no';
+	        	  }
+	        }
+	        
+        	$scope.roles = [
+	        	    "ROLE_PATIENT",
+	        	    "ROLE_HCP" ,
+	        	    "ROLE_OD" ,
+	        	    "ROLE_OPH" ,
+	        	    "ROLE_ADMIN", 
+	        	    "ROLE_ER",
+	        	    "ROLE_VIROLOGIST", 
+	        	    "ROLE_LABTECH" ,
+	        	    "ROLE_VACCINATOR",
+	        	    "ROLE_BSM",
+	        	    "ROLE_PATIENTADVOCATE"
+	        ];
+        	
+        	$scope.selectHCP = function(role) {
+        		if(role === "ROLE_OPH" && $scope.user.roles["ROLE_OPH"] ) {
+        			$scope.user.roles["ROLE_HCP"] = true;
+        			angular.element(document.getElementById('ROLE_HCP'))[0].disabled = true;
+        		} 
+        		if(role === "ROLE_OPH" && !$scope.user.roles["ROLE_OPH"] ) {
+        			angular.element(document.getElementById('ROLE_HCP'))[0].disabled = false;
+        		} 
+        		if(role === "ROLE_PATIENTADVOCATE") {
+        			if ($scope.user.roles["ROLE_PATIENTADVOCATE"]) {
+        				$scope.user.roles["ROLE_HCP"] = false;
+        				angular.element(document.getElementById('ROLE_HCP'))[0].disabled = true;
+        			}
+        			if (!$scope.user.roles["ROLE_PATIENTADVOCATE"]) {
+        				angular.element(document.getElementById('ROLE_HCP'))[0].disabled = false;
+        			}
+        			
+        			advocateFormVisibility();
+        		}
+        	}
+        	
+	        
+	        $scope.getRole = function(user) {
+	        	return user.roles.join(", ");
+	        }
+			
+		$scope.loadUsers();
+		});
+			
+</script>
+		<div ng-app="manageUsersApp" ng-controller="manageUsersCtrl">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h3>Admin Manage Users</h3>
+							</div>
+							<div class="panel-body">
+								<table class="table table-bordered">
+									<caption>Existing Users:</caption>
+									<thead>
+										<tr>
+											<th>Username</th>
+											<th>Role(s)</th>
+											<th>Enabled</th>
+											<th>Delete User</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr name="userTableRow"
+											ng-repeat="u in users | orderBy: 'name'"
+											ng-include="getTemplate(u)" userId={{u.username}}>
+										</tr>
+									</tbody>
+								</table>
+								<script type="text/ng-template" id="view">
+                <td name="nameCell">{{u.username}}</td>
+			    <td name="roleCell">{{getRole(u)}}</td>
+				<td name="enabledCell">{{enabledText(u)}}</td>
+                <td> 
+                  <div class="row text-center">
+                    <div class="col-md-6">
+                      <input type="button" value="Delete" class="btn btn-danger" name="deleteUser" ng-click="deleteUser(u)"/>                          
+                    </div>
+                  </div>
+                </td>
+                </script>
+								<br>
+								<style>
+form {
+	width: 400px;
+}
+
+.label {
+	float: right;
+	text-align: left;
+	width: 200px;
+	height: 20px;
+	color: #000000
+}
+
+input[type=text] {
+	float: right;
+	text-align: left;
+	width: 200px;
+}
+
+input[type=password] {
+	float: right;
+	text-align: left;
+	width: 200px;
+	height: 20px
+}
+
+.clear {
+	clear: both;
+	height: 0;
+	line-height: 0;
+}
+
+.floatright {
+	float: right;
+}
+
+#patientAdvocateInfo {
+	
+}
+
+</style>
+
+
+								<div class="row">
+									<div class="col-md-12">
+										<div class="panel panel-default">
+											<div class="panel-heading">Add a User</div>
+											<div class="panel-body">
+												<form name="addUserForm"
+													ng-submit="addUser(addUserForm.$valid)" class="col-md-12">
+													<div class="panel panel-default" style="float:right; width:40%" id="patientAdvocateInfo">
+													<div class="panel-heading">Patient Advocate Information</div>
+														<div class="panel-body">
+															<b>First Name</b><input type="text" name="firstname"
+																id="firstname" ng-model="user.firstName" class="form-horizontal" />
+																<br> <br>
+															<b>Middle Name</b><input type="text" name="middlename"
+																id="middlename" ng-model="user.middleName" class="form-horizontal" />
+															    <br> <br>
+															<b>Last Name</b><input type="text" name="lastname"
+																id="lastname" ng-model="user.lastName" class="form-horizontal" />
+															    <br> <br>
+															<b>Nickname</b><input type="text" name="nickname"
+																id="nickname" ng-model="user.nickname" class="form-horizontal" />
+															    <br> <br>
+															<b>Address Line 1</b><input type="text" name="addressline1"
+																id="addressline1" ng-model="user.address1" class="form-horizontal" />
+															    <br> <br>
+															<b>Address Line 2</b><input type="text" name="addressline2"
+																id="addressline2" ng-model="user.address2" class="form-horizontal" />
+															    <br> <br>
+															<b>City</b><input type="text" name="city"
+																id="city" ng-model="user.city" class="form-horizontal" />
+															    <br> <br>
+															<b>State</b><select name="state" id="state"
+																ng-model="user.state" style="float:right">
+																<option ng-repeat="st in states">{{st.id}}</option>
+																</select><br> <br>
+															<b>Zip</b><input type="text" name="zip"
+																id="zip" ng-model="user.zip" class="form-horizontal" />
+															    <br> <br>
+															<b>Phone Number</b><input type="text" name="phonenumber"
+																id="phonenumber" ng-model="user.phone" class="form-horizontal" />
+															    <br> <br>
+															<b>Email</b><input type="text" name="email"
+																id="email" ng-model="user.email" class="form-horizontal" />
+															    <br> <br>
+														</div>
+													</div>
+												
+												<div style = "float:left; width:30%">
+													<b>Username:</b> <input type="text" name="username"
+														id="username" ng-model="user.username" /> <br> <br>
+													<b>Password:</b> <input type="password" name="password"
+														id="password" ng-model="user.password" /> <br> <br>
+													<b>Password (again):</b> <input type="password"
+														name="password2" id="password2" ng-model="user.password2" />
+													<br> <br> <b>Role:</b>
+
+													<div ng-repeat="role in roles track by $index">
+														<input type="checkbox" id="{{role}}" ng-model="$parent.user.roles[role]" ng-change="selectHCP(role)" ><i>
+															{{role}}</i></input>
+													</div>
+
+													<br> <br> <b>Enabled?:</b> <input type="checkbox"
+														name="enabled" class="checkbox" ng-model="user.enabled" />
+													<br> <input type="submit" id="submit" value="Add User" />
+												</div>
+												</form>
+												
+												<div>
+													<p style="color: red" ng-model="errorAdding" id="error">{{errorAdding}}</p>
+												</div>
+												<div>
+													<p style="color: green" ng-model="successMessage"
+														id="success">{{successMessage}}</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</body>
+</html>

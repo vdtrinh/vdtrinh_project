@@ -1,0 +1,183 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: head(title=~{::title},links=~{})">
+<title>Patient Manage Advocate Permissions</title>
+<script th:src="@{/js/dateTimeService.js}"
+		src="../js/dateTimeService.js"></script>
+</head>
+<body th:include="layout :: body" th:with="content=~{::content}">
+	<div th:fragment="content">
+		<h1>Manage Patient Advocate Permissions</h1>
+		
+
+
+			<script th:inline="javascript">
+			/* Otherwise Thymeleaf tries to parse Javascript as XML and breaks itself sometimes.  Sigh */
+			/*<![CDATA[*/
+				var app = angular.module('permissionsApp', []);
+			
+				/**
+				 * A filter to humanize the text to be more user friendly.
+				 */
+				app.filter('humanize', function() {
+					return function(input) {
+						return input.toLowerCase().split('_')
+							.map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+							.join(' ');
+					}
+	            });
+			
+				app.controller('permissionsCtrl', function($scope, $http) {
+					$scope.displayName = function(p) {
+						return p.firstName + " " + p.lastName + " (" + p.username + ")";
+					}
+								
+					$http.get("/iTrust2/api/v1/patient").then(
+						function(response) {
+							$scope.user = response.data;
+							console.log($scope.user);
+							$scope.user.advocates = [];
+							for (let i = 0; i < $scope.user.patientAdvocates.length; i++) {
+								console.log($scope.user.patientAdvocates[i].patients[$scope.user.username]);
+							}
+							$scope.filteredAdvocates = $scope.filterList($scope.user.patientAdvocates);
+					});
+					
+					$scope.filterList = function (assignedAdvocates) {
+						
+						console.log(assignedAdvocates);
+						console.log(typeof associatedAdvocates == 'undefined');
+						
+						if (typeof assignedAdvocates === `undefined`) {
+							return;
+						}
+						
+						let filteredList = [];
+						
+						for (var x = 0; x < assignedAdvocates.length; x++) {
+							
+							let duplicate = false;
+							
+							for (var i = 0; i < filteredList.length; i++) {
+								if (assignedAdvocates[x].username == filteredList[i].username) {
+									duplicate = true;
+								}
+							}
+							if (!duplicate) {
+								filteredList.push(assignedAdvocates[x]);
+							}
+						}
+						
+						return filteredList;
+					}
+					
+					
+					// documentation on Angular filters: https://docs.angularjs.org/api/ng/filter/filter
+					$scope.submit = function() {	
+						var idx = 0;
+						$scope.updatePermissions(idx);
+					}
+					
+					$scope.updatePermissions = function(idx) {
+						console.log($scope.filteredAdvocates[idx]);
+						
+						var keys = Object.keys($scope.filteredAdvocates[idx].patients);
+						var values = Object.values($scope.filteredAdvocates[idx].patients);
+						var i;
+						for (i = 0; i < keys.length; i++) {
+							if (keys[i] == $scope.user.username) {
+								break;
+							}
+						}
+						console.log(values[i]);
+						console.log($scope.filteredAdvocates[idx].username);
+						var advocateName = $scope.filteredAdvocates[idx].username;
+						var patientName = $scope.user.username;
+
+						$http({
+							method : 'PUT',
+							url : '/iTrust2/api/v1/personnel/' + advocateName +
+								'/' + patientName,
+							data : values[i]
+						}).then(function(response) {
+							if (idx < $scope.filteredAdvocates.length - 1) {
+								idx++;
+								$scope.updatePermissions(idx);
+							} else {
+								$scope.message = "Patient advocate permissions updated successfully.";
+							}
+							
+							}, function(rejection) {
+								if (rejection.data.msg) {
+									$scope.message = "Error: " + rejection.data.msg;
+								} else {
+									$scope.message = "An error occured updating advocate permissions.";
+								}
+							})
+						}
+					
+					});
+				
+				
+				
+				
+
+			/*]]>*/
+		</script>
+
+	<div ng-app="permissionsApp" ng-controller="permissionsCtrl">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-primary">
+
+						<!-- log entry header -->
+						<div class="panel-heading">
+							<h3>Current Patient Advocates</h3>
+						</div>
+						<div class="panel-body">
+							<table class="table table-bordered" name="log_table">
+
+								<!-- table column headers -->
+								<thead>
+									<tr>
+										<th>Advocate Name</th>
+										<th>View My Prescriptions</th>
+										<th>View My Billing Information</th>
+										<th>View My Office Visits</th>
+									</tr>
+								</thead>
+
+								<!-- log entry for every row, ordered by date -->
+								<tbody>
+									<tr name="advocateTableRow" ng-repeat="advocate in filteredAdvocates">
+										<td name="advocateNameCell">{{advocate.username}}</td>
+										<td name="prescriptionsPermCell"><input type="checkbox" id="prescriptionPermBox" 
+											name="prescriptionPermBox" ng-model="advocate.patients[user.username][0]"> <label for="prescriptionPermBox"> Yes </label></td>
+										<td name="billingPermCell"><input type="checkbox" id="billingPermBox" 
+											name="billingPermBox" ng-model="advocate.patients[user.username][1]"> <label for="billingPermBox"> Yes </label></td>
+										<td name="officeVisitPermCell"><input type="checkbox" id="officeVisitPermBox" 
+											name="officeVisitPermBox" ng-model="advocate.patients[user.username][2]"> <label for="officeVisitPermBox"> Yes </label></td>
+									</tr>
+								</tbody>
+							</table>
+							
+							<!-- submit button -->
+							<div class="col-md-2">
+								<label>Submit:</label>
+									<div class="row">
+										<div class="col-md-4">
+											<button type="submit" class="btn btn-success" name="submit" ng-click="submit()">Save Changes</button>
+										</div>
+									</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</body>
+	</html>
+							

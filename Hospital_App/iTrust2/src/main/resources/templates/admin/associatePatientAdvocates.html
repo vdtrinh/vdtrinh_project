@@ -1,0 +1,330 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: head(title=~{::title},links=~{})">
+<title>Associate Patient Advocates</title>
+</head>
+<body th:include="layout :: body" th:with="content=~{::content}">
+	<div th:fragment="content">
+		<script th::inline="javascript">
+		/* Otherwise Thymeleaf tries to parse Javascript as XML and breaks itself sometimes.  Sigh */
+		/*<![CDATA[*/
+ 			var app = angular.module("associatePatientAdvocatesApp", []);
+			app.controller("associatePatientAdvocatesCtrl", function($scope, $http) {
+				
+				document.getElementById("editAssociationPanel").style.visibility = "hidden";
+				
+			$scope.patientAdvocates = [];
+	        $scope.loadPatientAdvocates = function () {
+	        	console.log("LOADING PATIENT ADVOCATES!!");
+	        	
+	        	$scope.patientAdvocates = [];
+	          $http.get("/iTrust2/api/v1/users").then(
+	            function (response) {
+	            	for (let i = 0; i < response.data.length; i++) {	              		
+	              		if (response.data[i].roles.includes("ROLE_PATIENTADVOCATE")) {
+	              			$scope.patientAdvocates.push(response.data[i]);
+	              		}
+	              	}
+	            	$scope.numPatients = $scope.patients.length;
+	              $scope.message = "";
+	            }, function (rejection) {
+	              $scope.patientAdvocates = [];
+	              $scope.message = "Could not display patient advocates";
+	            });
+	        }
+	        
+	        $scope.patients = [];
+	        $scope.loadPatients = function () {
+	        	$scope.patients = [];
+	        	$http.get("/iTrust2/api/v1/users").then(
+		            function (response) {
+		            	for (let i = 0; i < response.data.length; i++) {
+		              		if (response.data[i].roles.includes("ROLE_PATIENT")) {
+		              			$scope.patients.push(response.data[i]);
+		              		}
+		              	}
+		            	$scope.loadAssociations();
+		              $scope.message = "";
+		            }, function (rejection) {
+		              $scope.patients = [];
+		              $scope.message = "Could not display patients";
+		            });
+		        }
+	        
+	        $scope.loadAssociations = function () {
+	        	
+	        	$scope.associations = {};
+	        	
+	        	for (let i = 0; i < $scope.patients.length; i++) {
+	        		$scope.associations[$scope.patients[i].username] = false;
+	        	}
+	        	
+	        	console.log($scope.associations);
+	        	
+	        	$scope.currentPatients = Object.keys($scope.editingPA.patients);
+	        	
+	        	console.log($scope.currentPatients);
+	        	console.log($scope.currentPatients.length);
+	        	
+	        	for (let j = 0; j < $scope.currentPatients.length; j++) {
+	        		$scope.associations[$scope.currentPatients[j]] = true;
+	        	}
+	        	
+	        	console.log($scope.associations);
+	        	
+	        }
+	        
+	        $scope.listPatients = function (patientAdvocate) {
+	        	
+	        	$scope.patientsArray = Object.keys(patientAdvocate.patients);
+	        	let numPAPatients = $scope.patientsArray.length;
+	        	
+	        	if (numPAPatients == 0) {
+	        		return "";
+	        	} else if (numPAPatients == 1) {
+	        		return $scope.patientsArray[0];
+	        	}
+	        	
+	        	let patientsList = "";
+	        	
+	        	for (let i = 0; i < numPAPatients; i++) {
+	        		if (i <= numPAPatients - 2 ) {
+	        			patientsList = patientsList + $scope.patientsArray[i] + ", ";	        			
+	        		} else {
+	        			patientsList = patientsList + $scope.patientsArray[i];
+	        		}
+	        	}
+	        	
+	        	return patientsList;
+	        	
+	        }
+	        
+	        $scope.selectToEdit = function (patientAdvocate) {
+	        	document.getElementById("editAssociationPanel").style.visibility = "visible";
+	        	$scope.editingPA = patientAdvocate;
+	        	
+	        	console.log("SELECTED PATIENT ADVOCATE: " + $scope.editingPA.username);
+	        	
+	        	$scope.loadPatients();
+	        	
+	        }
+	        
+	        $scope.setLength = function () {
+	        	$scope.idx = 0;
+	        	console.log("scope = " + $scope.idx);
+	        	
+	        	$scope.successMessage = "";
+	        	$scope.errorAdding = "";
+	        	
+	        	$scope.assocLength = Object.keys($scope.associations).length;
+	        	console.log("associations length = " + $scope.assocLength);
+	        	
+	        	$scope.associate();
+	        }
+	        
+	        $scope.associate = function () {
+	        	
+	        	console.log("ASSOCIATE!");
+	        	console.log($scope.associations);
+	        	
+	        	<!--Add new associations with permissions of false for each - this will be edited elsewhere-->
+	        	
+	        	if ($scope.idx < $scope.assocLength) {
+	        		
+	        		let patientAssociation = Object.keys($scope.associations)[$scope.idx];
+	        		console.log(patientAssociation);
+	        		
+	        		$scope.thisPatient = $scope.patients.find(element => element.username == patientAssociation);
+	        		
+	        		if ($scope.currentPatients.includes(patientAssociation) && !$scope.associations[patientAssociation]) {
+	        			console.log(patientAssociation + " is already associated but should be deleted");
+	        			$http.delete("/iTrust2/api/v1/personnel/" + $scope.editingPA.username + "/" + patientAssociation).then(
+	        					function (response) {
+	        						$scope.successMessage = $scope.successMessage + patientAssociation + "successfully deleted from " + $scope.editingPA.username + "'s associations.\n";
+	        						console.log(patientAssociation + "successfully deleted from " + $scope.editingPA.username + "'s associations.");
+	        						$scope.idx++;
+	        	        			$scope.associate();
+	        					}, function (rejection) {
+	        						$scope.errorAdding = $scope.errorAdding + "Error deleting " + patientAssociation + " from " + $scope.editingPA.username + "'s associations.\n";
+	        						console.log("Error deleting " + patientAssociation + " from " + $scope.editingPA.username + "'s associations.");
+	        						$scope.idx++;
+	        	        			$scope.associate();
+	        					});
+	        		} else if (!$scope.currentPatients.includes(patientAssociation) && $scope.associations[patientAssociation]) {
+	        			console.log(patientAssociation + " is not already associated but will be added!");
+	        			$http.post("/iTrust2/api/v1/personnel/" + $scope.editingPA.username, $scope.thisPatient).then(
+	        					function (response) {
+	        						$scope.successMessage = $scope.successMessage + patientAssociation + " associated to " + $scope.editingPA.username + ".\n";
+	        						console.log(patientAssociation + " associated to " + $scope.editingPA.username + ".");
+	        						$scope.idx++;
+	        	        			$scope.associate();
+	        					}, function (rejection) {
+	        						$scope.errorAdding = $scope.errorAdding + "Error associating " + patientAssociation + " to " + $scope.editingPA.username + ".\n";
+	        						console.log("Error associating " + patientAssociation + " to " + $scope.editingPA.username + ".");
+	        						$scope.idx++;
+	        	        			$scope.associate();
+	        					});
+	        		} else {
+	        			console.log("No change with " + patientAssociation);
+	        			$scope.idx++;
+	        			$scope.associate();
+	        		}
+	        	}
+	        }
+
+	        $scope.getTemplate = function (user) {
+	          return 'view';
+	        };
+	        
+	        $scope.enabledText = function(user) {
+	        	  if(user.enabled) {
+	        		  return 'yes';        		  
+	        	  } else {
+	        		  return 'no';
+	        	  }
+	        }
+	        
+        	$scope.roles = [
+	        	    "ROLE_PATIENT",
+	        	    "ROLE_HCP" ,
+	        	    "ROLE_OD" ,
+	        	    "ROLE_OPH" ,
+	        	    "ROLE_ADMIN", 
+	        	    "ROLE_ER",
+	        	    "ROLE_VIROLOGIST", 
+	        	    "ROLE_LABTECH" ,
+	        	    "ROLE_VACCINATOR",
+	        	    "ROLE_BSM",
+	        	    "ROLE_PATIENTADVOCATE"
+	        ];        	
+	        
+	        $scope.getRole = function(user) {
+	        	return user.roles.join(", ");
+	        }
+			
+		$scope.loadPatientAdvocates();
+		});
+			
+</script>
+		<div ng-app="associatePatientAdvocatesApp" ng-controller="associatePatientAdvocatesCtrl">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h3>Admin Associate Patient Advocates</h3>
+							</div>
+							<div class="panel-body">
+								<table class="table table-bordered">
+									<caption>Patient Advocates:</caption>
+									<thead>
+										<tr>
+											<th>Username</th>
+											<th>Patients</th>
+											<th>Edit</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr name="patientAdvocateTableRow"
+											ng-repeat="pa in patientAdvocates | orderBy: 'name'"
+											ng-include="getTemplate(pa)" userId={{pa.username}}>
+										</tr>
+									</tbody>
+								</table>
+								<script type="text/ng-template" id="view">
+                <td name="nameCell">{{pa.username}}</td>
+				<td name="patientsCell">{{listPatients(pa)}}</td>
+                <td> 
+                  <div class="row text-center">
+                    <div class="col-md-6">
+                      <input type="button" value="Edit" class="btn btn-primary" name="editAssociations" ng-click="selectToEdit(pa)"/>                          
+                    </div>
+                  </div>
+                </td>
+                </script>
+								<br>
+								<style>
+form {
+	width: 400px;
+}
+
+.label {
+	float: right;
+	text-align: left;
+	width: 200px;
+	height: 20px;
+	color: #000000
+}
+
+input[type=text] {
+	float: right;
+	text-align: left;
+	width: 200px;
+	height: 20px
+}
+
+input[type=password] {
+	float: right;
+	text-align: left;
+	width: 200px;
+	height: 20px
+}
+
+.clear {
+	clear: both;
+	height: 0;
+	line-height: 0;
+}
+
+.floatright {
+	float: right;
+}
+
+#editAssociationPanel {
+	
+}
+
+</style>
+
+
+								<div class="row" id = "editAssociationPanel">
+									<div class="col-md-12">
+										<div class="panel panel-default">
+											<div class="panel-heading">Associate Patients to Patient Advocate</div>
+											<div class="panel-body">
+												<form name="associateForm"
+													ng-submit="setLength(associateForm.$valid)" class="col-md-12">
+													<div class="panel panel-default" style="float:right; width:40%" id="patientAdvocateInfo">
+													<div class="panel-heading">Patients</div>
+														<div class="panel-body">
+															<div ng-repeat="patient in patients track by $index">
+																<input type="checkbox" id="{{patient.username}}" ng-model="associations[patient.username]"><i>
+																		{{patient.username}}</i></input>
+															</div>
+														</div>
+													</div>
+												
+												<div style = "float:left; width:30%">
+													<b>SELECTED PATIENT ADVOCATE:<br>{{editingPA.username}}</b>
+													<br><br><i>Select patients to associate them to this Patient Advocate. Click <strong>Associate</strong> to submit.</i>
+													<br><br><br> <input type="submit" id="submit" value="Associate" />
+												</div>
+												</form>
+												
+												<div>
+													<!--<p style="color: red" ng-model="errorAdding" id="error">{{errorAdding}}</p>-->
+												</div>
+												<div>
+													<!-- <p style="color: green" ng-model="successMessage"
+														id="success">{{successMessage}}</p>-->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</body>
