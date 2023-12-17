@@ -1,0 +1,214 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    display: grid;
+    grid-template-rows: 0.3fr 3fr;
+    grid-template-columns: 10fr;
+    background-color: aquamarine;
+}
+
+#title {
+    text-align: center;
+    font-size: 4em;
+    border-radius: 0.2em;
+    border-style: dashed;
+    background-color: lightblue;
+    font-style: italic;
+    box-shadow: 1em;
+}
+
+.mainForm {
+    grid-column: span 2;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.sender {
+    display: grid;
+    grid-template-rows: 0.1fr 1fr 0.6fr;
+    grid-template-rows: none;
+    padding-bottom: 15px;
+}
+
+.header1 {
+    font-size: 2em;
+}
+
+.previewIm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#preView {
+    width: 300px;
+    height: 450px;
+}
+
+.nameField {
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+    grid-template-rows: none;
+}
+
+.first {
+    display: flex;
+    flex-direction: column;
+}
+
+#fName {
+    width: 170px;
+}
+
+.last {
+    display: flex;
+    flex-direction: column;
+}
+
+#lName {
+    width: 170px;
+}
+
+.receipient {
+    display: grid;
+    grid-template-rows: 0.1fr 1fr 0.6fr;
+    grid-template-rows: none;
+    padding-top: 0.5em;
+    border-left: 1px solid black;
+    padding-left: 10px;
+}
+
+.header2 {
+    font-size: 2em;
+}
+
+.nameInfo {
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+    grid-template-rows: none;
+}
+
+.firstR {
+    display: flex; 
+    flex-direction: column;
+}
+ #rec-fName {
+    width: 170px;
+}
+
+.lastR {
+    display: flex;
+    flex-direction: column;
+}
+
+#rec-lName {
+    width: 170px;
+}
+
+#messageBox {
+    width: 500px;
+    height: 200px;
+}
+
+.select {
+    padding-top: 85px;
+}
+
+.fields {
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+    grid-template-rows: none;
+    
+}
+
+.email {
+    display: flex;
+    flex-direction: column;
+}
+
+#emailField {
+    width: 170px;
+}
+
+.phoneField {
+    display: flex;
+    flex-direction: column;
+}
+
+#Phone {
+    width: 170px;
+}
+
+
+.payment {
+    grid-column: span 2;
+    grid-row: 2;
+    text-align: center;
+    padding-top: 10px;
+    border-top: 1px solid black;
+    display: grid;
+    grid-template-columns: 0.1fr 2fr 0.1fr;
+    grid-template-rows: 50px 50px 50px 50px;
+}
+
+#paymentHeader {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 2em;
+}
+
+.cardType {
+    grid-column: 2;
+    grid-row: 2;
+    justify-content: center;
+    gap: 50px;
+    display: flex;
+    flex-direction: row;
+}
+
+#card-select {
+    display: flex;
+    flex-direction: column;
+}
+
+#cType {
+    margin-right: 55px;
+}
+
+#card {
+    display: flex;
+    flex-direction: column;
+}
+
+#cNum {
+    margin-right: 55px;
+}
+
+.secret {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.term-condition {
+    grid-column: 2;
+    grid-row: 4;
+}
+
+.sendBut {
+    grid-column: 2;
+    grid-row: 5;
+}
+
+.send {
+    width: 300px;
+    height: 40px;
+    background-color: lightgray;
+}
+
+
+
+
+

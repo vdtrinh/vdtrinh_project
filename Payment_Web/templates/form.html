@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Form</title>
+    <script src="/js/validate.js"></script>
+    <link href="../css/form.css" rel="stylesheet" />
+</head>
+
+<body>
+    <header id="title">Website to pay your friends</header>
+    <form class="mainForm" method="post" action="formdata" enctype="multipart/form-data">
+        <div class="sender">
+            <header class="header1">Sender Details</header>
+            <div class="previewIm">
+                <img id="preView">
+                <input type="file" accept="image/*" onchange="previewImage(event)" name="uploadImage" id="previewBut" required>
+            </div>
+    
+
+            <div class="nameField">
+                <div class="first">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="fName" name="senderFirstName"
+                    minlength="2" maxlength="20" size="22" required> 
+                </div>
+                
+                <div class="last">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lName" name="SenderLastName" 
+                    minlength="2" maxlength="20" size="22" required> 
+                </div>
+            </div>
+            
+        </div>
+    
+        <div class="receipient">
+            <header class="header2">Recipient Details</header>
+            <div class="info">
+                <div class="nameInfo">
+                    <div class="firstR">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" id="rec-fName" name="first-name-rec"
+                        minlength="2" maxlength="20" size="22" required> 
+                    </div>
+                    
+                    <div class="lastR">
+                        <label for="lastName" id="lastField">Last Name:</label>
+                        <input type="text" id="rec-lName" name="last-name-rec"
+                        minlength="2" maxlength="20" size="22" required> 
+                    </div>
+                </div>
+                
+                
+                <div class="rMessage">
+                    <p>Message:</p>
+                    <textarea id="messageBox" name="message"
+                          rows="20" cols="50" required></textarea>
+                </div>
+    
+                
+    
+                <div class="select">
+                    <p> Notify Recipient: </p>
+                    <input type="radio" id="emails" name="type"
+                           value="emails">
+                    <label for="emails">Emails</label>
+    
+                    <input type="radio" id="SMS" name="type"
+                           value="SMS">
+                    <label for="SMS">SMS</label>
+    
+                    <input type="radio" id="DNN" name="type"
+                           value="DNN">
+                    <label for="DNN">Do not notify</label>
+                </div>
+    
+                <div class="fields">
+                    <div class="email">
+                        <label for="Emails">Emails:</label>
+                        <input type="text" id="emailField" name="rec-email"
+                        minlength="2" maxlength="20" size="22" placeholder="something@gmail.com"> 
+                    </div>
+                    
+                    <div class="phoneField">
+                        <label for="Phone">Phone Number:</label>
+                        <input type="text" id="Phone" name="rec-phone-num"
+                        minlength="2" maxlength="20" size="22" oninput="dash()" placeholder="123-456-7890"> 
+                    </div>
+    
+                    
+                </div>
+    
+            </div>
+        </div>
+    
+        <div class="payment">
+            <header id="paymentHeader">Payment Details</header>
+            <div class="cardType">
+                <div class="cardSelecting">
+                    <label id="cType" for="card-type">Card Type:</label>
+                    <select name="cards" id="card-select">
+                        <option value="Visa">Visa</option>
+                        <option value="Master">Master</option>
+                        <option value="Discover">Discover</option>
+                        <option value="American Express">American Express</option>
+                    </select>
+                </div>
+    
+                <div>
+                    <label id="cNum" for="cardnum">Card Number:</label>
+                    <input type="text" id="card" name="Number"
+                    minlength="18" maxlength="19" size="20" oninput="dash_card()" placeholder="4000-1111-2222-3333" required> 
+                </div>
+            </div>
+    
+            <div class="secret">
+                <label id="expirationDate" for="expiration">Expiration:</label>
+                <input type="month" name="exp" id="expirationField" required>
+    
+                <label for="CCV" id="CCVlabel">CCV:</label>
+                <input type="password" name="CCV" id="CCVField" size="4" maxlength="4" required>
+    
+                <label for="amount" id="amountLabel">Amount ($):</label>
+                <input type="number" step="0.01" name="amount" id="amountField" required>
+            </div>
+    
+            <div class="term-condition">
+                <input type="checkbox" id="termField" name="checkB" required>
+                <label for="term">I agree to the Terms and Conditions</label>
+            </div>
+    
+            <div class="sendBut">
+                <input type="submit" class="send" value="submit">
+            </div>
+        </div>
+    </form>
+
+</body>
+
+</html>
