@@ -1,0 +1,100 @@
+* {
+    box-sizing: border-box;
+}
+
+body{
+    background: radial-gradient(circle at 10% 20%, rgb(255, 197, 118) 0%, rgb(254, 106, 103) 47.7%, rgb(240, 23, 23) 92.3%);
+}
+
+#howler-title {
+    padding-top: 1%;
+    padding-left: 10%;
+    font-style: italic;
+    font-size: 400%;
+    font-weight: bold;
+}
+
+#Log-out{
+    padding-top: 15%;
+}
+
+#profile {
+    padding-top: 15%;
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+    border-style: double;
+    border-radius: 50%;
+}
+
+#follow-but {
+    margin-left: 35%;
+    margin-top: 5%;
+    height: 40%;
+    border-radius: 10%;
+}
+
+#post-and-content {
+    gap: 200%;
+    background-color: white;
+    border-style: double;
+    border-radius: 10%;
+}
+
+#textThing {
+    color: white;
+}
+
+#userPic {
+    background-color: black;
+}
+
+
+#userAvatar {
+    background-color: black;
+    border-radius: 50%;
+    width: 100%;
+    height: 80%;
+    border-radius: 50%;
+    padding-top: -5%;
+    display: flex;
+    justify-content: center;
+}
+
+.mainPage {
+    padding-top: 17%;
+}
+
+#userName {
+    padding-top: 15%;
+}
+
+.col-3 {
+    padding-top: 11%;
+}
+
+#content {
+    border-style: double;
+}
+
+#following-list {
+    padding-top: 3%;
+}
+
+#follow-box {
+    border-style: double;
+}
+
+#howlByProfileId {
+    padding-top: 3%;
+}
+
+#listOfFollower {
+    gap: 2%;
+}
+
+#followerGap {
+    gap: 5%;
+}

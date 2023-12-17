@@ -1,0 +1,21 @@
+.col-2 {
+    background-color: red;
+    height: 100vh;
+}
+h1 {
+    font-style: italic;
+    color: red;
+}
+
+#username {
+    width: 35%;
+}
+
+#login-form {
+    margin-left: 39%;
+}
+
+#submit {
+    margin-top: 4%;
+    margin-right: 65%;
+}
