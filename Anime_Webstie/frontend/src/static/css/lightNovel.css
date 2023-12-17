@@ -1,0 +1,15 @@
+#description {
+    /* background-color: rgb(198, 237, 250); */
+    background-image: linear-gradient(#fafffe, #e8fffc);
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: #96bbc8;
+    border-radius: 25px;
+
+    padding: 30px;
+}
+
+h4 {
+    text-align: center;
+}

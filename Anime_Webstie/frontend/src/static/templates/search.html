@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Search</title>
+
+        <link rel = "stylesheet" href = "../css/common.css">
+        <link rel = "stylesheet" href = "../css/search.css">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gloock">
+
+        <script src = "../js/search.js" type="module"></script>
+
+        <meta name = "viewport" content = "user-scalable=no">
+
+        <script src="/js/common.js" type="module"></script>
+
+        <link rel = "icon" href = "../images/logo.png">
+        <!-- <link rel = "icon" href = "../images/logo.png"> -->
+
+        <!--Web manifest-->
+        <link rel="manifest" href="../manifest.webmanifest" crossorigin = "use-credentials">
+
+        <!--Icons and theming-->
+        <link rel="apple-touch-icon" sizes="180x180" href="../images/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../images/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon-16x16.png">
+        <link rel="mask-icon" href="../images/icons/safari-pinned-tab.svg" color="#beb9dc">
+        <meta name="msapplication-TileColor" content="#beb9dc">
+        <meta name="theme-color" content="#ffffff">
+    </head>
+    <body>
+        <div id = "search-area">
+            <form id ="searchbar-and-button">
+                <input type = "text" id = "searchbar" placeholder = "Search for your favorite media...">
+                <input type = "button" value = "Search" id = "search-button">
+            </form>
+        </div>
+        <main>
+            <div id = "display-search">
+                <h1 id = anime-header>Anime</h1>
+                <div id = "animes"></div>
+                <h1 id = LN-header>Light Novel</h1>
+                <div id = "lightNovel"></div>
+                <h1 id = manga-header>Manga</h1>
+                <div id = "manga"></div>
+            </div>
+            <div id = "history">
+
+            </div>
+            <!-- <div id = "titles">
+                <div class = "title">
+                    <h2>One Punch Man</h2>
+                    <img class = "delete-button" src = "../images/delete.png">
+                </div>
+                <div class = "title">
+                    <h2>Attack on Titan</h2>
+                    <img class = "delete-button" src = "../images/delete.png">
+                </div>
+                <div class = "title">
+                    <h2>Time I Got Reincarnated as a Slime</h2>
+                    <img class = "delete-button" src = "../images/delete.png">
+                </div>
+                <div class = "title">
+                    <h2>Free!</h2>
+                    <img class = "delete-button" src = "../images/delete.png">
+                </div>
+            </div> -->
+        </main>
+        <!--Allow for user to scroll to very bottom of content without nav bar obstructing way-->
+        <footer id = "whitespace"></footer>
+        <div id = "nav-area">
+            <nav>
+                <a href="discover"><img src = "images/media.png"></a>
+                <a href = "favorites"><img src = "images/favorites.png"></a>
+                <a><img src = "images/search-selected.png"></a>
+                <a href = "profile"><img src = "images/profile.png"></a>
+            </nav>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Otakhub Login</title>
+
+        <link rel="stylesheet" href="css/common.css">
+        <link rel="stylesheet" href="./css/login.css">
+
+        <script src = "../js/login.js" type="module"></script> 
+               
+        <link rel = "stylesheet" href= "https://fonts.googleapis.com/css?family=Gloock">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+
+        <meta name = "viewport" content = "user-scalable=no">
+
+        <!-- <link rel = "icon" href = "../images/logo.png"> -->
+
+        <!--Web manifest-->
+        <link rel="manifest" href="../manifest.webmanifest" crossorigin = "use-credentials">
+
+        <!--Icons and theming-->
+        <link rel="apple-touch-icon" sizes="180x180" href="../images/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../images/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon-16x16.png">
+        <link rel="mask-icon" href="../images/icons/safari-pinned-tab.svg" color="#beb9dc">
+        <meta name="msapplication-TileColor" content="#beb9dc">
+        <meta name="theme-color" content="#ffffff">
+    </head>
+    <body>
+        <main>
+            <h1 id = "heading">Welcome back!</h1>
+            <div id = "credentials">
+                <label for = "username">Username:</label>
+                <input type = "text" id= "username" name = "username">
+    
+                <label for = "password">Password:</label>
+                <input type = "password" id="password" name = "password">
+    
+                <input type = "button" value = "let's go!" id ="login-button">
+                <p>New to Otakhub? <a href = "/signup">Register here.</a></p>
+            </div>
+        </main>        
+    </body>
+</html>

@@ -1,0 +1,123 @@
+#filter-area {
+    height: 100px;
+    
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 10px;
+
+    padding-bottom: 15px;
+    padding-left: 15px;
+
+    background-color: #EEEEEE;
+}
+
+#filter-area button {
+    font-size: 2vh;
+}
+
+main { 
+    background-color: white;
+}
+
+#favorites {
+    display: flex;
+    flex-direction: column;
+}
+
+.message-area {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2vh;
+}
+
+.empty-message {
+    font-family: 'Montserrat';
+}
+
+/* .favorite {
+    border-style: none none solid none;
+    border-color: #CCCCCC;
+    border-width: 1px;
+
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+
+    padding: 20px;
+    margin: 20px;
+} */
+
+.media-list {
+    /* margin: 1vh; */
+
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+}
+
+.media-div {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
+    padding: 1.5vh;
+
+    border-style: none none solid none;
+    border-width: 1px;
+    border-color: #CCCCCC;
+}
+
+.media-div:hover {
+    background-color: #F5F5F5;
+}
+
+.media {
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+
+    text-decoration: none;
+}
+
+.cover-image {
+    height: 30vh;
+    width: 20vh;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    background-color: #EEEEEE;
+
+    border-radius: 20px;
+}
+
+.favorite-title {
+    font-size: 3vh;
+
+    color: black;
+}
+
+.like-button {
+    display: flex;
+    align-items: right;
+    border: none;
+    cursor: pointer;
+    appearance: none;
+    background-color: inherit;
+
+    flex-grow: 0;
+}
+
+.like-button img {
+    height: 5.5vh;
+}

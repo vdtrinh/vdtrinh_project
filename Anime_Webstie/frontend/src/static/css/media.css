@@ -1,0 +1,140 @@
+* {
+    font-family: "Montserrat";
+
+    text-decoration: none;
+}
+
+#back-button-area {
+    position: absolute;
+    top: 1vh;
+    left: 1vh;
+    height: 100%;
+
+    z-index: 1;
+}
+
+#back-button-link {
+    position: sticky;
+    top: 5vh;
+}
+
+#back-button {
+    height: 4vh;
+
+    background-color: white;
+
+    border-radius: 100%;
+
+    padding: 2px;
+
+    box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .3);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 3vh;
+}
+
+#cover-image {
+    width: 100%;
+    height: 400px;
+
+    background-image: linear-gradient(lightblue, white);
+
+    border-radius: 25px;
+    border-style: none;
+
+    object-fit: contain;
+
+    margin-bottom: 1vh;
+}
+
+#metadata {
+    width: 100%;
+
+    margin: 25px;
+}
+
+#favorites-area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+h2, h3, h4, p {
+    margin: 1vh;
+
+    padding: 5px;
+}
+
+#title {
+    font-family: "Gloock";
+
+    font-size: 3vh;
+
+    flex-grow: 1;
+}
+
+#add-fav {
+    flex-grow: 0;
+
+    width: 5vh;
+}
+
+#volume-count {
+    font-size: 2vh;
+}
+
+#description {
+    font-size: 2vh;
+}
+
+#volumes {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+}
+
+.episode {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CCCCCC;
+
+    height: 50px;
+
+    padding: 1.5vh;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.episode:hover {
+    background-color: #F5F5F5;
+}
+
+.episode-text {
+    flex-grow: 1;
+
+    font-size: 2.5vh;
+
+    color: black;
+}
+
+.link-icon {
+    flex-grow: 0;
+
+    height: 30px;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    appearance: none;
+    background-color: inherit;
+}

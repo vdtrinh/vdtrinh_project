@@ -1,0 +1,183 @@
+#history {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+
+    margin-top: 50px;
+}
+
+.title {
+    border-style: none none solid none;
+    border-color: #CCCCCC;
+    border-width: 1px;
+
+    width: 50%;
+
+    display: flex;
+    flex-direction: row;
+
+    padding-bottom: 10px;
+}
+
+.title h2 {
+    font-weight: normal;
+
+    flex-grow: 1;
+
+    margin: 0;
+    padding: 0;
+}
+
+.delete-button {
+    flex-grow: 0;
+
+    height: 30px;
+}
+
+#animes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+
+    margin: 20px;
+}
+
+.anime {
+    position: relative;
+}
+
+#anime-header {
+    text-align: center;
+    visibility: hidden;
+    font-size: 3vh;
+}
+
+.anime-cover {
+    height: 30vh;
+
+    border-radius: 10px;
+}
+
+.anime:hover {
+    transform: scale(1.1, 1.1);
+}
+
+.anime-title {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+
+    color: white;
+
+    background-image: linear-gradient(0.25turn, #0a407e, #1b93ab);
+    box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .1);
+
+    width: 100%;
+
+    padding: 5px;
+
+    font-size: 1.75vh;
+}
+
+.animes {
+    position: relative;
+}
+
+#lightNovel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+
+    margin: 20px;
+}
+
+.lightNovel {
+    position: relative;
+}
+
+.lightNovel:hover {
+    transform: scale(1.1, 1.1);
+}
+
+#LN-header {
+    text-align: center;
+    visibility: hidden;
+    font-size: 3vh;
+}
+
+.LN-cover {
+    height: 30vh;
+
+    border-radius: 10px;
+}
+
+.LN-title {
+    position: absolute;
+    bottom: 5px;
+    left: 0px;
+
+    color: white;
+
+    /* background-color: blue; */
+    background-image: linear-gradient(0.25turn, #0a407e, #1b93ab);
+    box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .1);
+
+    width: 100%;
+
+    padding: 5px;
+
+    font-size: 1.75vh;
+}
+
+#manga-header {
+    text-align: center;
+    visibility: hidden;
+    font-size: 3vh;
+}
+
+#manga {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+
+    margin: 20px;
+}
+
+.manga {
+    position: relative;
+}
+
+.manga-cover {
+    height: 30vh;
+
+    border-radius: 10px;
+}
+
+.manga:hover {
+    transform: scale(1.1, 1.1);
+}
+
+.manga-title {
+    position: absolute;
+    bottom: 5px;
+    left: 0px;
+
+    color: white;
+
+    /* background-color: blue; */
+    background-image: linear-gradient(0.25turn, #0a407e, #1b93ab);
+    box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .1);
+
+    width: 100%;
+
+    padding: 5px;
+
+    font-size: 1.75vh;
+}

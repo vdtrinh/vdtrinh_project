@@ -1,0 +1,140 @@
+body {
+    background-image: linear-gradient(rgb(136, 174, 245), white);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+}
+
+main {
+    background-color: white;
+
+    /* border-radius: 15px; */
+
+    /* padding: 50px; */
+    padding: 7.5vh;
+
+    box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .05);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+}
+
+#heading {
+    text-align: center;
+
+    font-weight: normal;
+
+    font-size: 4vh;
+
+    margin: 0;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
+
+main p, main p * {
+    font-family: "Montserrat";
+
+    font-size: 2.5vh;
+}
+
+#credentials-area *, #name-area *, #picture-area * {
+    margin: 0.75vh;
+}
+
+#picture-area, #credentials-area {
+    display: none;
+}
+
+.credentials, .name {
+    font-size: 2.75vh;
+}
+
+input {
+    font-family: "Montserrat";
+
+    padding: 10px;
+}
+
+.error-message {
+    color: red;
+
+    font-size: 1.75vh;
+
+    margin: 5px;
+    padding: 0;
+
+    display: none;
+}
+
+#avatars {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1vh;
+}
+
+.avatar {
+    border-radius: 100%;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #CCCCCC;
+
+    height: 15vh;
+    width: 15vh;
+
+    object-fit: cover;
+}
+
+.avatar:hover {
+    cursor: pointer;
+}
+
+/* #upload-area {
+    border-radius: 15px;
+    border-style: dashed;
+    border-width: 1px;
+    border-color: #AAAAAA;
+
+    height: 20vh;
+
+    background-color: #EEEEEE;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#upload-preview {
+    max-height: 100%;
+} */
+
+button {
+    font-size: 2.75vh;
+
+    padding: 15px;
+    margin: 10px;
+
+    background-color: #320ea8;
+    
+    color: white;
+
+    border-radius: 10px;
+    border-style: none;
+
+    width: 100%;
+
+    cursor: pointer;
+
+    box-shadow: 0px 5px 10px 3px rgba(0, 0, 0, .05);
+}
+
+#next2, #submit {
+    display: none;
+}

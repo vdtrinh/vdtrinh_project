@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Discover</title>
+
+        <link rel = "stylesheet" href = "../css/discover.css">
+        <link rel = "stylesheet" href = "../css/common.css">
+        
+        <link rel = "stylesheet" href= "https://fonts.googleapis.com/css?family=Gloock">
+
+        <script src = "../js/common.js" type="module"></script>
+
+        <script src = "../js/discover.js" type = "module"></script>
+
+        <meta name = "viewport" content = "user-scalable=no">
+
+        <script src="/js/common.js" type="module"></script>
+
+        <link rel = "icon" href = "../images/logo.png">
+        <!-- <link rel = "icon" href = "../images/logo.png"> -->
+
+        <!--Web manifest-->
+        <link rel="manifest" href="../manifest.webmanifest" crossorigin = "use-credentials">
+
+        <!--Icons and theming-->
+        <link rel="apple-touch-icon" sizes="180x180" href="../images/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../images/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon-16x16.png">
+        <link rel="mask-icon" href="../images/icons/safari-pinned-tab.svg" color="#beb9dc">
+        <meta name="msapplication-TileColor" content="#beb9dc">
+        <meta name="theme-color" content="#ffffff">
+    </head>
+    <body>
+        <!--Temporarily remove, propose deleting as this is redundant-->
+
+        <!-- <div id = "search-area">
+            <form id ="searchbar-and-button">
+                <input type = "text" id = "searchbar" placeholder = "Search for your favorite media...">
+                <input type = "submit" value = "Search" id = "search-button">
+            </form>
+        </div> -->
+        <div id = "title-area">
+            <h1 id = "title"><span id = "discover">discover</span> your new favorite media...</h1>
+        </div>
+        <main id = "content">
+            <div id = "anime" class = "media-section">
+                <h2>Anime</h2>
+                <a href = "/animeHomePage" class = "preview">
+                    <img id = "anime-preview" class = "preview-image">
+                    <h3 class = "message" id = "anime-message">Discover anime...</h3>
+                </a>
+            </div>
+            <div id = "manga" class = "media-section">
+                <h2>Manga</h2>
+                <a href = "/mangaHomePage" class = "preview">
+                    <img id = "manga-preview" class = "preview-image">
+                    <h3 class = "message" id = "anime-message">Discover manga...</h3>
+                </a>
+            </div>
+            <div id = "light-novels" class = "media-section">
+                <h2>Light novels</h2>
+                <!-- <a href = "/lightNovelHomePage"><img id = "lightNovel-preview" class = "preview" src="../images/istockphoto-165818983-612x612.jpg"></a> -->
+                <a href = "/lightNovelHomePage" class = "preview">
+                    <img id = "lightNovel-preview" class = "preview-image">
+                    <h3 class = "message" id = "anime-message">Discover light novels...</h3>
+                </a>
+            </div>
+        </main>
+        <!--Allow for user to scroll to very bottom of content without nav bar obstructing way-->
+        <footer id = "whitespace"></footer>
+        <div id = "nav-area">
+            <nav>
+                <a><img src = "images/media-selected.png"></a>
+                <a href = "favorites"><img src = "images/favorites.png"></a>
+                <a href = "search"><img src="images/search.png" src = "search"></a>
+                <a href="profile"><img src="images/profile.png"></a>
+            </nav>
+        </div>
+    </body>
+</html>
